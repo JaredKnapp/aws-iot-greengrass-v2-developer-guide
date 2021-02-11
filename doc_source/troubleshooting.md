@@ -123,6 +123,7 @@ Use the following information to troubleshoot Greengrass component issues on cor
 
 **Topics**
 + [Python script doesn't log messages](#python-component-no-log-output)
++ [Component fails to start ('Sorry, user root is not allowed to execute')](#python-component-not-allowed-to-execute)
 
 ### Python script doesn't log messages<a name="python-component-no-log-output"></a>
 
@@ -151,3 +152,13 @@ Greengrass core devices collect logs that you can use to identify issues with co
     ```
 
 For more information about how to verify that your Python script outputs log messages, see [View component logs](#view-component-logs)\.
+
+### Component fails to start ('Sorry, user root is not allowed to execute')<a name="python-component-not-allowed-to-execute"></a>
+If your component fails to start and its component logs contain errors similar to the following:
+```
+[WARN] (Copier) com.example.HelloWorld: stderr. Sorry, user root is not allowed to execute '/bin/sh -c python3 /greengrass/v2/packages/artifacts/com.example.HelloWorld/1.0.0/hello_world.py 'world'' as ggc_user:ggc_group on ...
+```
+you may need to modify your */etc/sudoers* file. Use `sudo visudo` to verify that the *root* entry is configured to use `ALL` for both user and group (ALL:ALL):
+```
+root    ALL=(ALL:ALL) ALL
+```
